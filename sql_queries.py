@@ -134,7 +134,7 @@ staging_songs_copy = ("""
 
 songplay_table_insert = ("""
     INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
-    SELECT DISTINCT
+    SELECT
         TIMESTAMP 'epoch' + log.ts/1000 * INTERVAL '1 second' AS start_time,
         log.userId AS user_id,
         log.level AS level,
@@ -145,7 +145,7 @@ songplay_table_insert = ("""
         log.userAgent AS user_agent
     FROM staging_events log
     JOIN staging_songs song ON log.song = song.title AND log.artist = song.artist_name
-    WHERE log.page = 'NextSong';
+    WHERE log.page = 'NextSong' AND log.length = song.duration;
 """)
 
 user_table_insert = ("""
