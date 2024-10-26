@@ -1,6 +1,6 @@
 import configparser
 import psycopg2
-from sql_queries import copy_table_queries, insert_table_queries, analytical_queries
+from sql_queries import copy_table_queries, insert_table_queries
 
 
 def load_staging_tables(cur, conn):
@@ -14,11 +14,6 @@ def insert_tables(cur, conn):
         cur.execute(query)
         conn.commit()
 
-def select_queries(cur, conn):
-    for query in analytical_queries:
-        cur.execute(query)
-        conn.commit()
-
 def main():
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
@@ -29,7 +24,6 @@ def main():
     load_staging_tables(cur, conn)
     insert_tables(cur, conn)
 
-    print(select_queries(cur, conn))
     conn.close()
 
 
